@@ -31,7 +31,7 @@ const UserSchema =  mongoose.Schema({
 
     }
 })
-const userModel = await mongoose.model("users",UserSchema)
+const userModel = await mongoose.model("Users",UserSchema)
 export default userModel
 
  
