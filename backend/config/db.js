@@ -2,11 +2,17 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 dotenv.config()
+
+
+// console.log(process.env.MONGO_URI);
+
  const ConnectDB = async () => {
+
     try{
-    const conn = mongoose.createConnection(process.env.MONGO_URI);
-    // console.log(`connection created at ${conn.connection.host}`);
-    console.log("done");
+        //the reason why this connection works is that the IP address in the connection string is 127.0.0.1 instead of localhost (which is the bindIp in mongod.cfg)
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`connection created at ${conn.connection.host}`);
+    
     
     
 }
