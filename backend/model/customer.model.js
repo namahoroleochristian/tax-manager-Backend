@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-const UserSchema =  mongoose.Schema({
+const CustomerSchema =  mongoose.Schema({
     Names:{
     type:String,
     required: true,
@@ -29,9 +29,14 @@ const UserSchema =  mongoose.Schema({
         required: true,
         trim:true
 
+    },
+    password:{
+        type:String,
+        required:true,
+        trim:'true'
     }
 })
-const userModel = await mongoose.model("Users",UserSchema)
-export default userModel
+const customerModel = await mongoose.model("Customers",CustomerSchema)
+export default customerModel
 
  
