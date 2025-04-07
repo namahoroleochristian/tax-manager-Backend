@@ -18,6 +18,11 @@ const ItemSchema =  mongoose.Schema({
         
 
     },
+    unit:{
+        type:String,
+        enum: ['single','pack'],
+        required:true
+    },
     owner:{
         type: mongoose.Types.ObjectId,
         ref:'Users',
