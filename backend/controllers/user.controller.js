@@ -160,7 +160,7 @@ export const TaxPayer_Login = async (req,res) => {
     if (!email || !password) {
         return res.status(403).json({success:false,message: 'all fields are required'})
     }
-    const foundUser = userModel.findOne({email:email}).select({_id,email_password,role})
+    const foundUser = userModel.findOne({Email:email})
     if(!foundUser){
         return res.status(404).json({success:false,message: 'invalid credential'})
     }
@@ -182,3 +182,66 @@ export const TaxPayer_Login = async (req,res) => {
     })
     res.status(200).json({success:true,message:'successfull login',token:token})
 }
+export const Customer_Login = async (req,res) => {
+    const credentials = req.body
+    const email = credentials.email
+    const password = credentials.password
+    console.log(password);
+    
+    if (!email || !password) {
+        return res.status(403).json({success:false,message: 'all fields are required'})
+    }
+    const foundUser =await customerModel.findOne({Email:email})
+    
+    
+    if(!foundUser){
+        return res.status(404).json({success:false,message: 'invalid credential'})
+    }
+    const password_Match = await bcrypt.compare(password,foundUser.password)
+    if (!password_Match) {
+        return res.status(404).json({success:false,message: 'invalid credential'});
+    }
+    const token = jwt.sign({
+        id:foundUser._id,
+        role:foundUser.role
+    },process.env.SECRET_KEY,
+    {expiresIn:'100h'})
+    
+    res.cookie('jwt',token,{
+        httpOnly: false,
+        secure: process.env.NODE === 'production',
+        sameSite:'strict',
+        maxAge: 3600000 *10
+    })
+    res.status(200).json({success:true,message:'successfull login',token:token})
+}
+
+    export const Support_Login = async (req,res) => {
+        const credentials = req.body
+        const email = credentials.email
+        const password = credentials.password
+        if (!email || !password) {
+            return res.status(403).json({success:false,message: 'all fields are required'})
+        }
+        const foundUser = await SupportModel.findOne({Email: email})
+        if(!foundUser){
+            return res.status(404).json({success:false,message: 'invalid credential'})
+        }
+        const password_Match = await bcrypt.compare(password,foundUser.password)
+        if (!password_Match) {
+            return res.status(404).json({success:false,message: 'invalid credentials '});
+        }
+        const token = jwt.sign({
+            id:foundUser._id,
+            role:foundUser.role
+        },process.env.SECRET_KEY,
+        {expiresIn:'100h'})
+        
+        res.cookie('jwt',token,{
+            httpOnly: false,
+            secure: process.env.NODE === 'production',
+            sameSite:'strict',
+            maxAge: 3600000 *10
+        })
+        res.status(200).json({success:true,message:'successfull login',token:token})
+    }

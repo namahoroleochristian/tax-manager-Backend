@@ -1,9 +1,21 @@
 import express from 'express'
-import { Customer_Register, Support_Register, TaxPayer_register } from '../controllers/user.controller.js'
+import { Customer_Login, Customer_Register, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
 const app = express()
 export const Router = express.Router()
 
+// ------------- REGISTER --------------------- \\
 
 Router.post('/payer/register',TaxPayer_register)
 Router.post('/customer/register',Customer_Register)
 Router.post('/support/register',Support_Register)
+
+// ------------- REGISTER --------------------- \\
+
+
+
+// ------------- LOGIN --------------------- \\
+Router.post('/payer/login',TaxPayer_Login)
+Router.post('/customer/login',Customer_Login)
+Router.post('/support/login',Support_Login)
+
+// ------------- LOGIN --------------------- \\
