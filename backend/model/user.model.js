@@ -6,6 +6,10 @@ const UserSchema =  mongoose.Schema({
     trim:true
 
     },
+    Phone:{
+        type:String,
+        required:true
+    },
     TIN:{
         type:String,
         unique:true,

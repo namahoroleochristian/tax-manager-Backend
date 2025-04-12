@@ -12,7 +12,7 @@ export const TaxPayer_register =async (req,res) => {
     const TaxPayer = req.body;
     const Names = TaxPayer.Names
     // const TIN = TaxPayer.TIN.trim() tin is not User in put it is generated
-    const StringDOB = TaxPayer.Date_of_Birth.trim().split('/')
+    const StringDOB = String(TaxPayer.Date_of_Birth).split('/');
     console.log(StringDOB);
     
     const day = Number(StringDOB[0])
@@ -22,15 +22,16 @@ export const TaxPayer_register =async (req,res) => {
     console.log(month);
     const year = Number(StringDOB[2])
     console.log(year);
-    const Date_of_Birth =moment([year,month,day])
+    const Date_of_Birth = moment([year,month,day])
     Date_of_Birth.format('DD/MM/YYYY')
     console.log(Date_of_Birth,"date");
     
     const NationalId = Number(TaxPayer.NationalId.trim())
-    const role = TaxPayer.role.trim()
+    const role = TaxPayer.role
     const Email = TaxPayer.Email.trim()
-    const password = TaxPayer.password.trim()
-    if (!Names || !Date_of_Birth || !NationalId || !role) {
+    const Phone = TaxPayer.Phone.trim()
+    const password = String(TaxPayer.password).trim();
+    if (!Names || !Date_of_Birth || !NationalId || !role ||!Phone) {
         return res.status(403).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
@@ -42,6 +43,7 @@ export const TaxPayer_register =async (req,res) => {
     const newTaxPayer = new userModel({
         Names:Names,
         TIN:'RW-RRA-' + TIN,
+        Phone:Phone,
         Date_of_Birth:Date_of_Birth,
         NationalId:NationalId,
         role:role,
@@ -79,7 +81,7 @@ export const Support_Register = async (req,res) => {
     const role = Support.role.trim()
     const Email = Support.Email.trim()
     const password = Support.password.trim()
-    if (!Names || !Date_of_Birth || !NationalId || !role) {
+    if (!Names || !Date_of_Birth || !NationalId || !role || !Phone) {
         return res.status(403).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
