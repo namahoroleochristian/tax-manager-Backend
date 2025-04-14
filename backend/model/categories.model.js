@@ -1,43 +1,8 @@
 import mongoose from "mongoose"
-const ItemSchema =  mongoose.Schema({
-    Name:{
-    type:String,
-    required: true,
-    trim:true
-
-    },
-    barcode:{
-        type:String,
-        required:true,
-        unique:true,
-    },
-    Quantity:{
-        type:Number,
-        min:1,
-        required:true,
-        
-
-    },
-    unit:{
-        type:String,
-        enum: ["single","pack"],
-        required:true
-    },
-    owner:{
-        type: mongoose.Types.ObjectId,
-        ref:'Users',
-        required: true,
-
-    },
-    Sold:{
-        type: Boolean,
-        required: true,
-        trim:true,
-        default:false
-
-    },
+const CategoriesSchema =  mongoose.Schema({
+    
    
-    Category: {
+    Categories: {
         type:String,
         enum: [
             "Food",
@@ -81,33 +46,10 @@ const ItemSchema =  mongoose.Schema({
         trim:true
     
     },
-    Buying_price:{
-        type:Number,
-        min:0,
-        required:true
-    },
-    Selling_Price:{
-        type:Number,
-        min:0,
-        required:true
-    },
-    Input_VAT:{
-        type:Number,
-        min:0,
-        required:true
-    },
-    Output_VAT:{
-        type:Number,
-        min:0,
-        required:true
-    },
-    Payable_VAT:{
-        type:Number,
-        required: true
-    }
+    
 
 })
-const ItemModel = await mongoose.model("Items",ItemSchema)
-export default ItemModel
+const Categories = await mongoose.model("Categories",CategoriesSchema)
+export default Categories
 
  

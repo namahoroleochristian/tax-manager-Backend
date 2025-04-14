@@ -1,5 +1,6 @@
 import express from 'express'
 import { Customer_Login, Customer_Register, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
+import { createItem, deleteItem } from '../controllers/items.controller.js'
 const app = express()
 export const Router = express.Router()
 
@@ -19,3 +20,9 @@ Router.post('/customer/login',Customer_Login)
 Router.post('/support/login',Support_Login)
 
 // ------------- LOGIN --------------------- \\
+
+// ------------- ITEMS --------------------- \\
+Router.post('/item/register/:id',createItem)
+Router.delete('/item/delete/:id',deleteItem)
+
+// ------------- ITEMS --------------------- \\

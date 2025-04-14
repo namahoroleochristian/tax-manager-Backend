@@ -11,8 +11,9 @@ dotenv.config();
 export const TaxPayer_register =async (req,res) => { 
     const TaxPayer = req.body;
     const Names = TaxPayer.Names
+    const Phone = TaxPayer.Phone
     // const TIN = TaxPayer.TIN.trim() tin is not User in put it is generated
-    const StringDOB = String(TaxPayer.Date_of_Birth).split('/');
+    const StringDOB = TaxPayer.Date_of_Birth.trim().split('/')
     console.log(StringDOB);
     
     const day = Number(StringDOB[0])
@@ -22,16 +23,15 @@ export const TaxPayer_register =async (req,res) => {
     console.log(month);
     const year = Number(StringDOB[2])
     console.log(year);
-    const Date_of_Birth = moment([year,month,day])
+    const Date_of_Birth =moment([year,month,day])
     Date_of_Birth.format('DD/MM/YYYY')
     console.log(Date_of_Birth,"date");
     
     const NationalId = Number(TaxPayer.NationalId.trim())
-    const role = TaxPayer.role
+    const role = TaxPayer.role.trim()
     const Email = TaxPayer.Email.trim()
-    const Phone = TaxPayer.Phone.trim()
-    const password = String(TaxPayer.password).trim();
-    if (!Names || !Date_of_Birth || !NationalId || !role ||!Phone) {
+    const password = TaxPayer.password.trim()
+    if (!Names || !Date_of_Birth || !NationalId || !role || !Phone) {
         return res.status(403).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
@@ -42,8 +42,8 @@ export const TaxPayer_register =async (req,res) => {
     
     const newTaxPayer = new userModel({
         Names:Names,
+        Phone: Phone,
         TIN:'RW-RRA-' + TIN,
-        Phone:Phone,
         Date_of_Birth:Date_of_Birth,
         NationalId:NationalId,
         role:role,
@@ -81,7 +81,7 @@ export const Support_Register = async (req,res) => {
     const role = Support.role.trim()
     const Email = Support.Email.trim()
     const password = Support.password.trim()
-    if (!Names || !Date_of_Birth || !NationalId || !role || !Phone) {
+    if (!Names || !Date_of_Birth || !NationalId || !role) {
         return res.status(403).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
@@ -110,7 +110,11 @@ export const Support_Register = async (req,res) => {
 export const Customer_Register = async( req,res) => {
     const Customer = req.body;
     const Names = Customer.Names
+
     const Phone = Customer.Phone
+    console.log(Phone);
+    console.log("phone is up");
+    
     // const TIN = Customer.TIN.trim() tin is not User in put it is generated
     const StringDOB = Customer.Date_of_Birth.trim().split('/')
     console.log(StringDOB);
@@ -159,10 +163,13 @@ export const TaxPayer_Login = async (req,res) => {
     const credentials = req.body
     const email = credentials.email
     const password = credentials.password
+    
     if (!email || !password) {
         return res.status(403).json({success:false,message: 'all fields are required'})
     }
-    const foundUser = userModel.findOne({Email:email})
+    const foundUser =await userModel.findOne({Email:email})
+    console.log(foundUser);
+    
     if(!foundUser){
         return res.status(404).json({success:false,message: 'invalid credential'})
     }

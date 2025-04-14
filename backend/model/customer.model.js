@@ -7,7 +7,7 @@ const CustomerSchema =  mongoose.Schema({
 
     },
     Phone:{
-        type:String,
+        type: String,
         required:true,
         trim:true,
         // uppercase:true
