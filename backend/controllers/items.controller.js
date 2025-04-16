@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ItemModel from "../model/item.model.js";
+import ItemModel from "../model/items/item.model.js";
 
 
 
@@ -59,16 +59,31 @@ export const deleteItem = async (req,res) => {
      try {
        const result= await ItemModel.findByIdAndDelete(id)
         res.status(204).json({success: true,message:'item deleted successfully'})
-     }
-     catch(error){
+    }
+    catch(error){
         return res.status(500).json({success:false, message: error.message})
-     }
-
+    }
+    
 }
 export const updateItem = async (req,res) => { 
     const {id} = req.params
+    const newData = req.body
     if(!id){
-        return res.status(400)
+        return res.status(400).json({success:false,message:'Id not provided in the URI'})
+    }
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        res.status(403).json({success:false,message:'the Id is invalid'})
+    }
+    if(!newData.name || !newData.barcode || !newData.quantity || !newData.unit  || !id || !newData.sold || !newData.category || !newData.buyingPrice || !newData.sellingPrice){
+        return res.status(403).json({success:false,message: 'all fields are not full'})
+    }
+    
+    try {
+        await ItemModel.findByIdAndUpdate(id,newData,{new:true,runValidators:true})
+        res.status(201).json({success: true,message:'item updated successfully'})
+
+    } catch (error) {
+    return res.status(500).json({success:false,message: error.message})
     }
 
 

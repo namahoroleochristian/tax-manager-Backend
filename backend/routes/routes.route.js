@@ -1,6 +1,7 @@
 import express from 'express'
 import { Customer_Login, Customer_Register, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
 import { createItem, deleteItem } from '../controllers/items.controller.js'
+import { createSaleByBarcode } from '../controllers/sales.controller.js'
 const app = express()
 export const Router = express.Router()
 
@@ -24,5 +25,14 @@ Router.post('/support/login',Support_Login)
 // ------------- ITEMS --------------------- \\
 Router.post('/item/register/:id',createItem)
 Router.delete('/item/delete/:id',deleteItem)
+Router.delete('/item/delete/:id',deleteItem)
 
 // ------------- ITEMS --------------------- \\
+
+
+// ------------- SALES --------------------- \\
+
+Router.post('/sales/create',createSaleByBarcode)
+
+
+// ------------- SALES --------------------- \\

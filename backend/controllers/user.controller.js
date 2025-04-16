@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
-import userModel from "../model/user.model.js";
-import customerModel from "../model/customer.model.js";
-import SupportModel from "../model/support.model.js";
+import userModel from "../model/users/user.model.js";
+import customerModel from "../model/users/customer.model.js";
+import SupportModel from "../model/users/support.model.js";
 import moment from "moment";
 
 dotenv.config();
@@ -168,7 +168,7 @@ export const TaxPayer_Login = async (req,res) => {
         return res.status(403).json({success:false,message: 'all fields are required'})
     }
     const foundUser =await userModel.findOne({Email:email})
-    console.log(foundUser);
+    // console.log(foundUser);
     
     if(!foundUser){
         return res.status(404).json({success:false,message: 'invalid credential'})
@@ -210,6 +210,7 @@ export const Customer_Login = async (req,res) => {
     if (!password_Match) {
         return res.status(404).json({success:false,message: 'invalid credential'});
     }
+    try{
     const token = jwt.sign({
         id:foundUser._id,
         role:foundUser.role
@@ -222,7 +223,12 @@ export const Customer_Login = async (req,res) => {
         sameSite:'strict',
         maxAge: 3600000 *10
     })
-    res.status(200).json({success:true,message:'successfull login',token:token})
+   return res.status(200).json({success:true,message:'successfull login',token:token})
+}
+catch(error){
+    return res.status(500).json({success:false,message:error.message})
+
+}
 }
 
     export const Support_Login = async (req,res) => {

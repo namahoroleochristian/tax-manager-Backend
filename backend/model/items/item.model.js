@@ -106,7 +106,7 @@ const ItemSchema =  mongoose.Schema({
         required: true
     }
 
-})
+},{timestamps:true})
 const ItemModel = await mongoose.model("Items",ItemSchema)
 export default ItemModel
 
