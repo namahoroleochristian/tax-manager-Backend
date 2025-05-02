@@ -1,9 +1,18 @@
 import SaleModel from '../model/sales/sales.model.js';
 import userModel from "../model/users/user.model.js";
 import ItemModel from '../model/items/item.model.js'; 
+import mongoose from 'mongoose';
+import { request } from 'express';
 
 export const createSaleByBarcode = async (req, res) => {
 
+  const user = req.user;
+  if (!user) {
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
   try {
     const { customerPhoneNumber, barcode, paymentMethod } = req.body;
 
@@ -84,4 +93,29 @@ export const createSaleByBarcode = async (req, res) => {
     console.error("Error creating sale by barcode(s):", error);
     res.status(500).json({ message: "Failed to create sale by barcode(s).", error: error.message });
   }
+};
+export const deleteSaleByBarcode = async (req, res) => {
+  const user = req.user;
+  if(!user){
+    return res.status(403).json({success:false,message:"unauthorised to do delete"})
+  }
+  if(user.role !== 'Vendor'){
+    return res.status(403).json({success:false,message:"unauthorised to do so"})
+  }
+  const id = request.params;
+  if(!id){
+  return res.status(404).json({success:false,message:"no Id found"})
+}
+if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({success:false,message:"No valid Id found"})
+    
+  }
+  try{
+    await SaleModel.findByIdAndDelete(id);
+    return res.status(200).json({success:true,message:"item deleted successfully"})
+  }
+  catch(error){
+    return res.status(500).json({success:false,message:error.message})
+  }
+
 };

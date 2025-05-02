@@ -2,6 +2,7 @@ import express from 'express'
 import { Customer_Login, Customer_Register, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
 import { createItem, deleteItem } from '../controllers/items.controller.js'
 import { createSaleByBarcode } from '../controllers/sales.controller.js'
+import { tokenVerify } from '../middlewares/tokenVerify.js'
 const app = express()
 export const Router = express.Router()
 
@@ -32,7 +33,7 @@ Router.delete('/item/delete/:id',deleteItem)
 
 // ------------- SALES --------------------- \\
 
-Router.post('/sales/create',createSaleByBarcode)
+Router.post('/sales/create',tokenVerify,createSaleByBarcode)
 
 
 // ------------- SALES --------------------- \\
