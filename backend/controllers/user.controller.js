@@ -260,3 +260,10 @@ catch(error){
         })
         res.status(200).json({success:true,message:'successfull login',token:token})
     }
+export const forgotPassword = async (req,res) => {
+    const user = req.body
+    if(!user.email || !user.role){
+        return res.status(403).json({success:false,message: 'all fields are required'})
+    }
+    
+}
