@@ -56,6 +56,7 @@ export const TaxPayer_register =async (req,res) => {
         
     }
     catch(error){
+        console.log(error.message);
         return res.status(500).json({success: false,message :error.message})
     }
 };
@@ -104,6 +105,7 @@ export const Support_Register = async (req,res) => {
         
     }
     catch(error){
+        console.log(error.message);
         return res.status(500).json({success: false,message :error.message})
     }
 };
@@ -156,6 +158,7 @@ export const Customer_Register = async( req,res) => {
         
     }
     catch(error){
+        console.log(error.message);
         return res.status(500).json({success: false,message :error.message})
     }
 }
@@ -226,6 +229,7 @@ export const Customer_Login = async (req,res) => {
    return res.status(200).json({success:true,message:'successfull login',token:token})
 }
 catch(error){
+    console.log(error.message);
     return res.status(500).json({success:false,message:error.message})
 
 }

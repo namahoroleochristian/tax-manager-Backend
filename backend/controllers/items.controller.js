@@ -40,6 +40,8 @@ export const createItem = async (req,res ) => {
         return res.status(200).json({success: true,message: "item created"})
     }
     catch(error){
+        console.log(error.message);
+        
         res.status(500).json({success:false,message: error.message})
     }
 
@@ -61,6 +63,7 @@ export const deleteItem = async (req,res) => {
         res.status(204).json({success: true,message:'item deleted successfully'})
     }
     catch(error){
+        console.log(error.message);
         return res.status(500).json({success:false, message: error.message})
     }
     
@@ -83,6 +86,7 @@ export const updateItem = async (req,res) => {
         res.status(201).json({success: true,message:'item updated successfully'})
 
     } catch (error) {
+        console.log(error.message);
     return res.status(500).json({success:false,message: error.message})
     }
 

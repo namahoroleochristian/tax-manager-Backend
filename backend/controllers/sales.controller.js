@@ -115,6 +115,7 @@ if(!mongoose.Types.ObjectId.isValid(id)){
     return res.status(200).json({success:true,message:"item deleted successfully"})
   }
   catch(error){
+    console.log(error.message);
     return res.status(500).json({success:false,message:error.message})
   }
 
