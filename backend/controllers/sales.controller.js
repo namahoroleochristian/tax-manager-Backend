@@ -46,6 +46,8 @@ export const createSaleByBarcode = async (req, res) => {
       }
 
       if (item.Quantity < 1) {
+        console.log(`Item "${item.Name}" with barcode "${currentBarcode}" is out of stock.` );
+        
         return res.status(400).json({ message: `Item "${item.Name}" with barcode "${currentBarcode}" is out of stock.` });
       }
 

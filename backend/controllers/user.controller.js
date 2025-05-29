@@ -12,32 +12,34 @@ export const TaxPayer_register =async (req,res) => {
     const TaxPayer = req.body;
     const Names = TaxPayer.Names
     const Phone = TaxPayer.Phone
-    // const TIN = TaxPayer.TIN.trim() tin is not User in put it is generated
+    // const TIN = TaxPayer.TIN.trim() tin is not User input it is generated
     const StringDOB = TaxPayer.Date_of_Birth.trim().split('/')
-    console.log(StringDOB);
+    // console.log(StringDOB);
     
     const day = Number(StringDOB[0])
-    console.log(day);
+    // console.log(day);
     
     const month = Number(StringDOB[1]) - 1
     console.log(month);
     const year = Number(StringDOB[2])
-    console.log(year);
+    // console.log(year);
     const Date_of_Birth =moment([year,month,day])
     Date_of_Birth.format('DD/MM/YYYY')
-    console.log(Date_of_Birth,"date");
+    // console.log(Date_of_Birth,"date");
     
     const NationalId = Number(TaxPayer.NationalId.trim())
     const role = TaxPayer.role.trim()
     const Email = TaxPayer.Email.trim()
     const password = TaxPayer.password.trim()
     if (!Names || !Date_of_Birth || !NationalId || !role || !Phone) {
-        return res.status(403).json({success: false,message :"all fields are required "})
+        console.log("all fields are required  upon tax payer registration");
+        
+        return res.status(404).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
-        return res.status(403).json({success: false,message :"can't create admin role Go back or you may be punished"})
+        return res.status(403).json({success: false,message :"can't create a user with admin role "})
     }
-    const TIN = String(Math.round(Math.random()* 10**9))
+    const TIN = String(Math.round(Math.random() * 10**9))
     const hashed_Password = await bcrypt.hash(password,10)
     
     const newTaxPayer = new userModel({
@@ -52,12 +54,12 @@ export const TaxPayer_register =async (req,res) => {
     })
     try{
         await newTaxPayer.save()
-        return res.status(200).json({success: true,message : "new usercreate"})
+        return res.status(200).json({success: true,message : "new user created "})
         
     }
     catch(error){
         console.log(error.message);
-        return res.status(500).json({success: false,message :error.message})
+        return res.status(500).json({success: false,message: error.message})
     }
 };
 export const Support_Register = async (req,res) => {
@@ -66,15 +68,15 @@ export const Support_Register = async (req,res) => {
 
     const Phone = Support.Phone.trim()
     const StringDOB = Support.Date_of_Birth.trim().split('/')
-    console.log(StringDOB);
+    // console.log(StringDOB);
     
     const day = Number(StringDOB[0])
-    console.log(day);
+    // console.log(day);
     
     const month = Number(StringDOB[1]) - 1
-    console.log(month);
+    // console.log(month);
     const year = Number(StringDOB[2])
-    console.log(year);
+    // console.log(year);
     const Date_of_Birth =moment([year,month,day])
     Date_of_Birth.format('DD/MM/YYYY')
     
@@ -83,7 +85,9 @@ export const Support_Register = async (req,res) => {
     const Email = Support.Email.trim()
     const password = Support.password.trim()
     if (!Names || !Date_of_Birth || !NationalId || !role) {
-        return res.status(403).json({success: false,message :"all fields are required "})
+        console.log("all fields are required  support registration");
+
+        return res.status(404).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
         return res.status(403).json({success: false,message :"can't create admin role Go back or you may be punished"})
@@ -101,7 +105,7 @@ export const Support_Register = async (req,res) => {
     })
     try{
         await newSupport.save()
-        return res.status(200).json({success: true,message : "new user created "})
+        return res.status(201).json({success: true,message : "new user created "})
         
     }
     catch(error){
@@ -114,20 +118,20 @@ export const Customer_Register = async( req,res) => {
     const Names = Customer.Names
 
     const Phone = Customer.Phone
-    console.log(Phone);
-    console.log("phone is up");
+    // console.log(Phone);
+    // console.log("phone is up");
     
-    // const TIN = Customer.TIN.trim() tin is not User in put it is generated
+    // const TIN = Customer.TIN.trim() tin is not required for customer Users
     const StringDOB = Customer.Date_of_Birth.trim().split('/')
-    console.log(StringDOB);
+    // console.log(StringDOB);
     
     const day = Number(StringDOB[0])
-    console.log(day);
+    // console.log(day);
     
     const month = Number(StringDOB[1]) - 1
-    console.log(month);
+    // console.log(month);
     const year = Number(StringDOB[2])
-    console.log(year);
+    // console.log(year);
     const Date_of_Birth =moment([year,month,day])
     Date_of_Birth.format('DD/MM/YYYY')
     
@@ -136,10 +140,14 @@ export const Customer_Register = async( req,res) => {
     const Email = Customer.Email.trim()
     const password = Customer.password.trim()
     if (!Names || !Date_of_Birth || !Phone || !role) {
-        return res.status(403).json({success: false,message :"all fields are required "})
+        console.log("all fields are required  upon customer registration");
+        
+        return res.status(404).json({success: false,message :"all fields are required "})
     }
     if(role.toLowerCase() === 'admin'){
-        return res.status(403).json({success: false,message :"can't create admin role Go back or you may be punished"})
+        
+        console.log("can't create user with admin role Go back");
+        return res.status(403).json({success: false,message :"can't create user with admin role Go back"})
     }
     const hashed_Password = await bcrypt.hash(password,10)
     
