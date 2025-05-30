@@ -6,7 +6,7 @@ dotenv.config()
 
 export const tokenVerify  = async (req,res,next) => { 
     // for this code to work on mobile we user req.body insteady of req.cookies as mobile apps don't have cookies
-    const token =req.cookies.jwt;
+    const token = req.cookies.jwt || req.body;
     // console.log(token);
     
     if(!token){
