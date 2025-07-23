@@ -1,5 +1,5 @@
 import express from 'express'
-import { Customer_Login, Customer_Register, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
+import { Customer_Login, Customer_Register, forgotPassword, Support_Login, Support_Register, TaxPayer_Login, TaxPayer_register } from '../controllers/user.controller.js'
 import { createItem, deleteItem } from '../controllers/items.controller.js'
 import { createSaleByBarcode } from '../controllers/sales.controller.js'
 import { tokenVerify } from '../middlewares/tokenVerify.js'
@@ -22,6 +22,12 @@ Router.post('/customer/login',Customer_Login)
 Router.post('/support/login',Support_Login)
 
 // ------------- LOGIN --------------------- \\
+
+
+
+// ------------- PASSWORD RECOVERY --------------------- \\
+Router.post('/user/recover-password',forgotPassword)
+// ------------- PASSWORD RECOVERY --------------------- \\
 
 // ------------- ITEMS --------------------- \\
 Router.post('/item/register/:id',createItem)

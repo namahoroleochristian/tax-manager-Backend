@@ -1,3 +1,6 @@
+import nodemailer from 'nodemailer';
+import { createTransport } from 'nodemailer';
+// import MailtrapTransport from 'mailtrap';
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
@@ -272,10 +275,60 @@ catch(error){
         })
         res.status(200).json({success:true,message:'successfull login',token:token})
     }
+   var transport = nodemailer.createTransport({
+  host: "live.smtp.mailtrap.io",
+  port: 587,
+  auth: {
+    user: "api",
+    pass: process.env.MAILTRAP_TOKEN, // Use the environment variable for the token"
+  }
+});
 export const forgotPassword = async (req,res) => {
     const user = req.body
     if(!user.email || !user.role){
         return res.status(403).json({success:false,message: 'all fields are required'})
     }
+    const foundUser = await userModel.findOne({Email: user.email, role: user.role})
+    if(!foundUser){ 
+        return res.status(404).json({success:false,message: 'user not found'})
+    }
+    const VerificationCode = String(Math.round(Math.random() * 10**6)).padStart(6, '0')
+    foundUser.VerificationCode = VerificationCode
+    foundUser.VerificationCodeExpires = Date.now() + 3600000 // 1 hour
+    try {
+        await foundUser.save()
+
+const TOKEN = process.env.MAILTRAP_TOKEN;
+
+
+
+const sender = {
+  address: "smtp@mailtrap.io",
+  name: "leo namahoro",
+};
+const recipients = [
+  foundUser.email, // Assuming foundUser.Email is the recipient's email
+];
+
+transport
+  .sendMail({
+    from: sender,
+    to: user.email,
+    subject: "Your password recovery code",
+    text: `Your password recovery code is ${VerificationCode}. It will expire in 1 hour.`,
+    category: "primary",
+  })
+  .then(console.log, console.error);
+
+        // Here you would typically send the verification code to the user's email
+
+        console.log(`Verification code for ${user.email}: ${VerificationCode}`);
+        return res.status(200).json({success: true, message: 'Verification code sent successfully'})
+    }
+    catch (error) {
+        console.log(error.message);
+        return res.status(500).json({success: false, message: error.message})
+    }
+
     
 }
