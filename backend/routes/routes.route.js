@@ -10,7 +10,7 @@ import {
     TaxPayer_register
 } from '../controllers/user.controller.js'
 import { createItem, deleteItem } from '../controllers/items.controller.js'
-import { createSaleByBarcode } from '../controllers/sales.controller.js'
+import { createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode } from '../controllers/sales.controller.js'
 import { tokenVerify } from '../middlewares/tokenVerify.js'
 import { verifyCode } from '../middlewares/VerifyCode.js'
 export const Router = express.Router()
@@ -56,6 +56,8 @@ Router.delete('/item/delete/:id', deleteItem)
 // ------------- SALES --------------------- \\
 
 Router.post('/sales/create', tokenVerify, createSaleByBarcode)
+Router.post('/sales/deete', tokenVerify, deleteSaleByBarcode)
+Router.post('/sales/get', tokenVerify, getSaleByBarcode)
 
 
 // ------------- SALES --------------------- \\

@@ -52,6 +52,7 @@ export const createSaleByBarcode = async (req, res) => {
       }
 
       saleItemsData.push({
+        barcode:currentBarcode,
         item: item._id,                                                             
         quantitySold: 1,
         sellingPriceAtSale: item.Selling_Price,
@@ -72,7 +73,7 @@ export const createSaleByBarcode = async (req, res) => {
 
    
     const newSale = new SaleModel({
-        customerPhone: customerPhoneNumber,
+      customerPhone: customerPhoneNumber,
       itemsSold: saleItemsData,
       totalAmount: totalAmount,
       paymentMethod: paymentMethod || 'cash',
@@ -120,3 +121,43 @@ if(!mongoose.Types.ObjectId.isValid(id)){
     console.log(error.message);
     return res.status(500).json({success:false,message:error.message})
   }};
+
+export const getSaleByBarcode = async (req,res) => {
+  try {
+    
+    const {user}= req.user;
+    const {barcode}= req.body;
+    if (!user) {
+      return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+   let barcodesToProcess = [];
+   const saleItemsData = [];
+   
+    if (Array.isArray(barcode)) {
+      barcodesToProcess = barcode;
+       for (const currentBarcode of barcodesToProcess) {
+      const item = await ItemModel.findOne({ barcode: currentBarcode });
+      if (!item) {
+        notFoundBarcodes.push(currentBarcode);
+        continue; 
+      }
+
+    }
+  } else if (typeof barcode == 'string' && barcode.trim() !== '') {
+    barcodesToProcess = [barcode.trim()];
+    const item = await ItemModel.findOne({ barcode: currentBarcode });
+    
+  } else {
+    return res.status(400).json({ message: "Barcode(s) not provided or invalid format." });
+  }
+} catch (error) {
+    return res.status(500).json({success:false,message:error.message})
+  
+}
+    
+ 
+  
+}
