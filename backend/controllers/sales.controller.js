@@ -161,3 +161,20 @@ export const getSaleByBarcode = async (req,res) => {
  
   
 }
+export const getSales =  async (req,res)=>{
+  const {user} = req.user;
+  if (!user) {
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  try {
+    const id = user._id;
+    const sales = await SaleModel.find({ownerId:id})
+   return res.json({sales})
+  } catch (error) {
+    return res.status(500).json({success:false,message:error.message})
+  }
+
+}
