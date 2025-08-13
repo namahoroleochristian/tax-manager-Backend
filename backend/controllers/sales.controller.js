@@ -122,45 +122,47 @@ if(!mongoose.Types.ObjectId.isValid(id)){
     return res.status(500).json({success:false,message:error.message})
   }};
 
-export const getSaleByBarcode = async (req,res) => {
-  try {
-    
-    const {user}= req.user;
-    const {barcode}= req.body;
-    if (!user) {
-      return res.status(403).json({success: false, message: "not authorized"})
-  }
-  else if(user.role !== "Vendor"){
-    return res.status(403).json({success: false, message: "not authorized"})
-  }
-   let barcodesToProcess = [];
-   const saleItemsData = [];
-   
-    if (Array.isArray(barcode)) {
-      barcodesToProcess = barcode;
-       for (const currentBarcode of barcodesToProcess) {
-      const item = await ItemModel.findOne({ barcode: currentBarcode });
-      if (!item) {
-        notFoundBarcodes.push(currentBarcode);
-        continue; 
-      }
 
+
+export const getSaleByBarcode = async (req, res) => {
+  try {
+    const user = req.user;
+    const { barcode } = req.body;
+
+    if (!user || user.role !== "Vendor") {
+      return res.status(403).json({ success: false, message: "Not authorized" });
     }
-  } else if (typeof barcode == 'string' && barcode.trim() !== '') {
-    barcodesToProcess = [barcode.trim()];
-    const item = await ItemModel.findOne({ barcode: currentBarcode });
-    
-  } else {
-    return res.status(400).json({ message: "Barcode(s) not provided or invalid format." });
+
+    if (!barcode) {
+      return res.status(400).json({ message: "Barcode not provided." });
+    }
+
+    const ownerId = user._id;
+
+    // Step 1: Find the item by its barcode
+    const item = await ItemModel.findOne({ barcode: barcode });
+
+    if (!item) {
+      return res.status(404).json({ success: false, message: "No item found for this barcode." });
+    }
+
+    // Step 2: Find sales that contain this item's ID in the itemsSold array
+    const sales = await SaleModel.find({
+      ownerId: ownerId,
+      "itemsSold.item": item._id,
+    }).populate("itemsSold.item");
+
+    if (sales.length === 0) {
+      return res.status(404).json({ success: false, message: "No sales found for the item with this barcode." });
+    }
+
+    return res.json({ success: true, sales });
+
+  } catch (error) {
+    console.error("Error finding sale by barcode:", error);
+    return res.status(500).json({ success: false, message: "An internal server error occurred." });
   }
-} catch (error) {
-    return res.status(500).json({success:false,message:error.message})
-  
-}
-    
- 
-  
-}
+};
 export const getSales =  async (req,res)=>{
   const {user} = req.user;
   if (!user) {

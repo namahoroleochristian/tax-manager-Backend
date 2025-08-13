@@ -56,7 +56,7 @@ Router.delete('/item/delete/:id', deleteItem)
 // ------------- SALES --------------------- \\
 
 Router.post('/sales/create', tokenVerify, createSaleByBarcode)
-Router.post('/sales/deete', tokenVerify, deleteSaleByBarcode)
+Router.post('/sales/delete', tokenVerify, deleteSaleByBarcode)
 Router.post('/sales/get', tokenVerify, getSaleByBarcode)
 
 

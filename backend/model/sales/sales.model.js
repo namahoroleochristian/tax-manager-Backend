@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ItemModel from "../items/item.model";
+import ItemModel from "../items/item.model.js";
 
 const SaleSchema = new mongoose.Schema({
   ownerId: {
@@ -30,11 +30,6 @@ const SaleSchema = new mongoose.Schema({
     required: true,
   },
   itemsSold: [{
-    barcode: {
-      type: String,
-      required: true,
-      ref: 'Items'
-    },
     item: {
       type: mongoose.Types.ObjectId,
       ref: 'Items',
