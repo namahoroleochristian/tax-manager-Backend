@@ -8,9 +8,12 @@ import {
     Support_Register,
     TaxPayer_Login,
     TaxPayer_register
-} from '../controllers/user.controller.js'
-import { createItem, deleteItem } from '../controllers/items.controller.js'
-import { createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode } from '../controllers/sales.controller.js'
+        } from '../controllers/user.controller.js'
+
+import { createItem, deleteItem, updateItem } from '../controllers/items.controller.js'
+import { 
+    createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode 
+} from '../controllers/sales.controller.js'
 import { tokenVerify } from '../middlewares/tokenVerify.js'
 import { verifyCode } from '../middlewares/VerifyCode.js'
 export const Router = express.Router()
@@ -48,7 +51,8 @@ Router.post('/support/login', Support_Login)
 // ------------- ITEMS --------------------- \\
 Router.post('/item/register/:id', createItem)
 Router.delete('/item/delete/:id', deleteItem)
-Router.delete('/item/delete/:id', deleteItem)
+Router.delete('/item/update/:id', updateItem)
+Router.delete('/items/get', updateItem)
 
 // ------------- ITEMS --------------------- \\
 

@@ -5,6 +5,13 @@ import ItemModel from "../model/items/item.model.js";
 
 
 export const createItem = async (req,res ) => { 
+       const {user} = req.user;
+  if (!user) {
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
     const ItemData = req.body
     const {id} = req.params
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -49,6 +56,13 @@ export const createItem = async (req,res ) => {
 }
 
 export const deleteItem = async (req,res) => {
+       const {user} = req.user;
+  if (!user) {
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
     const {id} = req.params
      if(!id){
         return res.status(404).json({success:false,message:"no Id provided in the URI"})
@@ -92,4 +106,20 @@ export const updateItem = async (req,res) => {
 
 
 
+}
+export  const getItems = async (req,res) => {
+    const {user} = req.user;
+  if (!user) {
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  else if(user.role !== "Vendor"){
+    return res.status(403).json({success: false, message: "not authorized"})
+  }
+  try {
+    const id = user._id;
+    const items = await ItemModel.find({ownerId:id})
+   return res.json({items})
+  } catch (error) {
+    return res.status(500).json({success:false,message:error.message})
+  }
 }
