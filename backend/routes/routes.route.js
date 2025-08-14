@@ -8,11 +8,11 @@ import {
     Support_Register,
     TaxPayer_Login,
     TaxPayer_register
-        } from '../controllers/user.controller.js'
+} from '../controllers/user.controller.js'
 
 import { createItem, deleteItem, updateItem } from '../controllers/items.controller.js'
-import { 
-    createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode 
+import {
+    createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode
 } from '../controllers/sales.controller.js'
 import { tokenVerify } from '../middlewares/tokenVerify.js'
 import { verifyCode } from '../middlewares/VerifyCode.js'
@@ -24,7 +24,7 @@ Router.post('/payer/register', TaxPayer_register)
 Router.post('/customer/register', Customer_Register)
 Router.post('/support/register', Support_Register)
 
-// ------------- REGISTER --------------------- \\
+//  ------------- REGISTER --------------------- \\
 
 // ------------- PASSWORD --------------------- \\
 Router.post('/request/VerificationCode', sendVerificationCode)
@@ -42,17 +42,11 @@ Router.post('/support/login', Support_Login)
 
 // ------------- LOGIN --------------------- \\
 
-
-
-// // ------------- PASSWORD RECOVERY --------------------- \\
-// Router.post('/user/recover-password', forgotPassword)
-// // ------------- PASSWORD RECOVERY --------------------- \\
-
 // ------------- ITEMS --------------------- \\
-Router.post('/item/register/:id', createItem)
-Router.delete('/item/delete/:id', deleteItem)
-Router.delete('/item/update/:id', updateItem)
-Router.delete('/items/get', updateItem)
+Router.post('/item/register/:id', tokenVerify, createItem)
+Router.delete('/item/delete/:id', tokenVerify, deleteItem)
+Router.delete('/item/update/:id', tokenVerify, updateItem)
+Router.delete('/items/get', tokenVerify, updateItem)
 
 // ------------- ITEMS --------------------- \\
 
@@ -62,6 +56,5 @@ Router.delete('/items/get', updateItem)
 Router.post('/sales/create', tokenVerify, createSaleByBarcode)
 Router.post('/sales/delete', tokenVerify, deleteSaleByBarcode)
 Router.post('/sales/get', tokenVerify, getSaleByBarcode)
-
 
 // ------------- SALES --------------------- \\
