@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 import ItemModel from "../model/items/item.model.js";
 
-
-
-
 export const createItem = async (req,res ) => { 
        const {user} = req.user;
   if (!user) {
@@ -119,6 +116,22 @@ export  const getItems = async (req,res) => {
     const id = user._id;
     const items = await ItemModel.find({ownerId:id})
    return res.json({items})
+  } catch (error) {
+    return res.status(500).json({success:false,message:error.message})
+  }
+}
+export const getTotalItemsPrice = async (req,res) => {
+  //    const {user} = req.user;
+     const {id} = req.params;
+  // if (!user) {
+  //   return res.status(403).json({success: false, message: "not authorized"})
+  // }
+  // else if(user.role !== "Vendor"){
+  //   return res.status(403).json({success: false, message: "not authorized"})
+  // }
+  try {
+    const TotalItemsPrice =await ItemModel.find({owner:id}).select({Buying_price})
+    return res.json({TotalItemsPrice})
   } catch (error) {
     return res.status(500).json({success:false,message:error.message})
   }

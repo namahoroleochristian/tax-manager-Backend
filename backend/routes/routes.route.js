@@ -10,7 +10,7 @@ import {
     TaxPayer_register
 } from '../controllers/user.controller.js'
 
-import { createItem, deleteItem, updateItem } from '../controllers/items.controller.js'
+import { createItem, deleteItem, getTotalItemsPrice, updateItem } from '../controllers/items.controller.js'
 import {
     createSaleByBarcode, deleteSaleByBarcode, getSaleByBarcode
 } from '../controllers/sales.controller.js'
@@ -47,6 +47,7 @@ Router.post('/item/register/:id', tokenVerify, createItem)
 Router.delete('/item/delete/:id', tokenVerify, deleteItem)
 Router.delete('/item/update/:id', tokenVerify, updateItem)
 Router.delete('/items/get', tokenVerify, updateItem)
+Router.get('/items/totalPrice/:id', getTotalItemsPrice)
 
 // ------------- ITEMS --------------------- \\
 
